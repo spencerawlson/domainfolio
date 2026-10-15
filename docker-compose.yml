@@ -1,0 +1,19 @@
+services:
+  domainfolio-web:
+    build: .
+    image: domainfolio-web:latest
+    container_name: domainfolio-web
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DATA_DIR: /app/data
+    volumes:
+      - domainfolio-data:/app/data
+    ports:
+      - "8096:3000"
+    restart: unless-stopped
+
+volumes:
+  domainfolio-data:
