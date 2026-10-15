@@ -17,7 +17,11 @@ export async function POST(request: NextRequest) {
   const password = form ? String(form.get("password") || "") : "";
   const expected = process.env.ADMIN_PASSWORD || "";
 
-  const ok = expected !== "" && timingSafeEqualStrings(password, expected);
+  if (expected === "" || !process.env.SESSION_SECRET) {
+    return NextResponse.redirect(new URL("/admin/login?error=config", request.url), 303);
+  }
+
+  const ok = timingSafeEqualStrings(password, expected);
 
   if (!ok) {
     return NextResponse.redirect(new URL("/admin/login?error=1", request.url), 303);

@@ -23,7 +23,8 @@ export function createSession(): { value: string; maxAge: number } {
 
 /** Verify a session cookie value. */
 export function verifySession(value: string | undefined | null): boolean {
-  if (!value) return false;
+  // Unconfigured secret means no session can be valid; send to login rather than crash.
+  if (!value || !process.env.SESSION_SECRET) return false;
   const [expStr, sig] = value.split(".");
   const exp = Number(expStr);
   if (!Number.isFinite(exp) || exp * 1000 < Date.now()) return false;

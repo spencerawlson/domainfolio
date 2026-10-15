@@ -9,7 +9,9 @@ export default async function AdminLogin({ searchParams }: Props) {
       <h1>Admin sign in</h1>
       {error && (
         <div className="error" role="alert">
-          Wrong password. Please try again.
+          {error === "config"
+            ? "Admin sign-in is not configured. Set ADMIN_PASSWORD and SESSION_SECRET in .env."
+            : "Wrong password. Please try again."}
         </div>
       )}
       <form method="POST" action="/api/admin/login">
