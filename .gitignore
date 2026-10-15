@@ -8,3 +8,4 @@ data/
 *.sqlite-shm
 next-env.d.ts
 .DS_Store
+tunnel.env

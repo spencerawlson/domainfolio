@@ -65,30 +65,36 @@ export function OfferForm({
           {error}
         </div>
       )}
-      <div className="field">
-        <label htmlFor="offer-name">Your name</label>
-        <input id="offer-name" name="name" required maxLength={120} autoComplete="name" />
-      </div>
-      <div className="field">
-        <label htmlFor="offer-email">Email</label>
-        <input id="offer-email" name="email" type="email" required autoComplete="email" />
+      <div className="field-row">
+        <div className="field">
+          <label htmlFor="offer-name">Your name</label>
+          <input id="offer-name" name="name" required maxLength={120} autoComplete="name" />
+        </div>
+        <div className="field">
+          <label htmlFor="offer-email">Email</label>
+          <input id="offer-email" name="email" type="email" required autoComplete="email" />
+        </div>
       </div>
       <div className="field">
         <label htmlFor="offer-amount">
           Your offer{minOfferLabel ? ` (minimum ${minOfferLabel})` : ""}
         </label>
-        <input
-          id="offer-amount"
-          name="amount"
-          type="number"
-          min="1"
-          step="1"
-          placeholder="e.g. 2500"
-        />
+        <div className="input-prefix">
+          <span aria-hidden="true">$</span>
+          <input
+            id="offer-amount"
+            name="amount"
+            type="number"
+            min="1"
+            step="1"
+            inputMode="numeric"
+            placeholder="Enter an amount"
+          />
+        </div>
       </div>
       <div className="field">
         <label htmlFor="offer-message">Message (optional)</label>
-        <textarea id="offer-message" name="message" rows={4} maxLength={2000} />
+        <textarea id="offer-message" name="message" rows={3} maxLength={2000} />
       </div>
       <div className="honeypot" aria-hidden="true">
         <label>
@@ -96,9 +102,10 @@ export function OfferForm({
           <input name="website" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
-      <button className="btn" type="submit" disabled={status === "sending"}>
-        {status === "sending" ? "Sending…" : "Make an offer"}
+      <button className="btn block" type="submit" disabled={status === "sending"}>
+        {status === "sending" ? "Sending…" : "Send offer"}
       </button>
+      <p className="fine">No commitment. Your details are only shared with the seller.</p>
     </form>
   );
 }

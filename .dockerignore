@@ -1,0 +1,11 @@
+node_modules
+.next
+data
+.env
+.env.*
+!.env.example
+tunnel.env
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+.git

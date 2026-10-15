@@ -10,6 +10,11 @@ export interface CatalogDomain {
   tagline: string | null;
 }
 
+function splitDomain(domain: string): [string, string] {
+  const dot = domain.indexOf(".");
+  return dot > 0 ? [domain.slice(0, dot), domain.slice(dot)] : [domain, ""];
+}
+
 export function CatalogSearch({
   domains,
   categories,
@@ -41,44 +46,50 @@ export function CatalogSearch({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           aria-label="Search domains"
-          style={{ flex: "1 1 220px" }}
+          style={{ flex: "1 1 240px" }}
         />
-        <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label="Category">
-          <option value="">All categories</option>
-          {categories.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
+        {categories.length > 1 && (
+          <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label="Category">
+            <option value="">All categories</option>
+            {categories.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
 
       {filtered.length === 0 ? (
-        <p className="muted">No domains match your search.</p>
+        <div className="empty">No domains match your search.</div>
       ) : (
         <div className="grid">
-          {filtered.map((d) => (
-            <article key={d.domain} className="card">
-              <h3 style={{ fontSize: "1.35rem", marginBottom: "0.25rem" }}>{d.domain}</h3>
-              {d.category && (
-                <span className="badge" style={{ marginBottom: "0.6rem" }}>
-                  {d.category}
-                </span>
-              )}
-              {d.tagline && <p className="muted" style={{ margin: "0.5rem 0 1rem" }}>{d.tagline}</p>}
-              <div style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "1rem" }}>
-                {d.priceLabel ?? "Make an offer"}
-              </div>
+          {filtered.map((d) => {
+            const [name, tld] = splitDomain(d.domain);
+            return (
               <a
-                className="btn"
+                key={d.domain}
+                className="card domain-card"
                 href={`https://${d.domain}/`}
-                target="_blank"
-                rel="noopener noreferrer"
+                aria-label={`${d.domain}${d.priceLabel ? `, ${d.priceLabel}` : ""}`}
               >
-                View this domain
+                {d.category && (
+                  <span className="badge" style={{ alignSelf: "flex-start" }}>
+                    {d.category}
+                  </span>
+                )}
+                <h3 className="name">
+                  {name}
+                  <span className="tld">{tld}</span>
+                </h3>
+                {d.tagline && <p className="tagline">{d.tagline}</p>}
+                <div className="foot">
+                  <span className="price">{d.priceLabel ?? "Make an offer"}</span>
+                  <span className="go">View →</span>
+                </div>
               </a>
-            </article>
-          ))}
+            );
+          })}
         </div>
       )}
     </>
