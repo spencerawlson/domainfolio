@@ -39,7 +39,7 @@ export default function AdminDomains() {
                 <input id="d-category" name="category" placeholder="e.g. Brandable" />
               </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1rem" }}>
               <div className="field">
                 <label htmlFor="d-price">Buy-it-now price (leave empty for make-an-offer)</label>
                 <input id="d-price" name="price" type="number" min="0" step="1" />
@@ -47,6 +47,10 @@ export default function AdminDomains() {
               <div className="field">
                 <label htmlFor="d-min">Minimum offer</label>
                 <input id="d-min" name="min_offer" type="number" min="0" step="1" />
+              </div>
+              <div className="field">
+                <label htmlFor="d-lease">Lease-to-own months (Afternic)</label>
+                <input id="d-lease" name="lease_months" type="number" min="1" max="120" step="1" />
               </div>
             </div>
             <div className="field">

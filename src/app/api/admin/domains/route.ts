@@ -12,6 +12,12 @@ function toNumberOrNull(v: FormDataEntryValue | null): number | null {
   return Number.isFinite(n) && n >= 0 ? n : null;
 }
 
+/** Lease-to-own term in whole months (1–120), or null when unset/invalid. */
+function toLeaseMonthsOrNull(v: FormDataEntryValue | null): number | null {
+  const n = toNumberOrNull(v);
+  return n !== null && Number.isInteger(n) && n >= 1 && n <= 120 ? n : null;
+}
+
 /** Create or update a domain (form posts from the admin UI). */
 export async function POST(request: NextRequest) {
   const denied = requireAdmin(request);
@@ -40,6 +46,7 @@ export async function POST(request: NextRequest) {
       status,
       price: toNumberOrNull(form.get("price")),
       min_offer: toNumberOrNull(form.get("min_offer")),
+      lease_months: toLeaseMonthsOrNull(form.get("lease_months")),
       category: String(form.get("category") || "").trim() || null,
       tagline: String(form.get("tagline") || "").trim() || null,
       notes: String(form.get("notes") || "").trim() || null,

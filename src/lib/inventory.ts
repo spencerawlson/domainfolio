@@ -37,6 +37,7 @@ export interface DomainInput {
   status: string;
   price: number | null;
   min_offer: number | null;
+  lease_months: number | null;
   category: string | null;
   tagline: string | null;
   notes: string | null;
@@ -49,13 +50,14 @@ export function upsertDomain(input: DomainInput): number {
   if (existing) {
     getDb()
       .prepare(
-        `UPDATE domains SET status = ?, price = ?, min_offer = ?, category = ?, tagline = ?,
+        `UPDATE domains SET status = ?, price = ?, min_offer = ?, lease_months = ?, category = ?, tagline = ?,
            notes = ?, registrar = ?, expires_on = ?, updated_at = datetime('now') WHERE id = ?`,
       )
       .run(
         input.status,
         input.price,
         input.min_offer,
+        input.lease_months,
         input.category,
         input.tagline,
         input.notes,
@@ -67,14 +69,15 @@ export function upsertDomain(input: DomainInput): number {
   }
   const result = getDb()
     .prepare(
-      `INSERT INTO domains (domain, status, price, min_offer, category, tagline, notes, registrar, expires_on)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO domains (domain, status, price, min_offer, lease_months, category, tagline, notes, registrar, expires_on)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .run(
       input.domain,
       input.status,
       input.price,
       input.min_offer,
+      input.lease_months,
       input.category,
       input.tagline,
       input.notes,
