@@ -38,7 +38,7 @@ export function Shell({
     <div className="shell">
       <aside className="sidebar" aria-label="Portfolio">
         <a href={HOME} className="side-brand">
-          <LogoMark size={30} />
+          <LogoMark size={30} tone="dark" />
           <span>
             <strong>{NAME}</strong>
             <small>Domain portfolio</small>
