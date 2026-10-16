@@ -1,151 +1,139 @@
 import type { DomainRow } from "@/lib/db";
 import { formatPrice } from "@/lib/pricing";
 import { OfferForm } from "./OfferForm";
-import { DomainName, SiteFooter, SiteNav } from "./SiteNav";
+import { DomainName, Shell } from "./SiteNav";
 
 const RESPONSE_TIME = process.env.SELLER_RESPONSE_TIME || "two business days";
 const PORTFOLIO_URL = process.env.PORTFOLIO_URL || "";
 
-function headline(status: DomainRow["status"]): string {
-  if (status === "sold") return "This domain has been sold";
-  if (status === "hold") return "This domain is not currently available";
-  return "This domain is for sale";
-}
+const STATUS: Record<string, { label: string; tone: string }> = {
+  for_sale: { label: "For sale", tone: "ok" },
+  sold: { label: "Sold", tone: "bad" },
+  hold: { label: "Reserved", tone: "warn" },
+};
 
-const icon = { width: 20, height: 20, fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
-
-const PERKS = [
-  {
-    title: "Escrow-protected payment",
-    body: "Your money is held by an independent escrow service until the domain is in your account.",
-    svg: (
-      <svg viewBox="0 0 24 24" {...icon}>
-        <path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6l8-3z" />
-        <path d="M9 12l2 2 4-4" />
-      </svg>
-    ),
-  },
-  {
-    title: "Quick reply",
-    body: `The seller typically responds within ${RESPONSE_TIME}.`,
-    svg: (
-      <svg viewBox="0 0 24 24" {...icon}>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 2" />
-      </svg>
-    ),
-  },
-  {
-    title: "Free transfer for the buyer",
-    body: "The seller covers escrow and transfer fees. The domain moves straight to your registrar.",
-    svg: (
-      <svg viewBox="0 0 24 24" {...icon}>
-        <path d="M5 12h14" />
-        <path d="M13 6l6 6-6 6" />
-      </svg>
-    ),
-  },
+const STEPS = [
+  { title: "Agree on a price", body: "Buy at the listed price or send an offer. The seller replies by email." },
+  { title: "Pay into escrow", body: "Your payment is held by an independent escrow service, never sent to the seller directly." },
+  { title: "Receive the domain", body: "The domain is transferred to your registrar account. No fees for the buyer." },
+  { title: "Escrow releases payment", body: "Only after you confirm the domain is yours does the seller get paid." },
 ];
 
 /**
- * Shared sale page: huge domain name and trust points on the left, sticky price +
- * offer card on the right (for-sale only). Used by /lander, /sold and /hold routes.
+ * Listing detail page in the style of an Aegis console resource view:
+ * header with status pills, details + process cards, and a sticky offer card.
+ * Used by /lander, /sold and /hold routes.
  */
 export function LanderView({ record }: { record: DomainRow }) {
   const price = formatPrice(record.price);
   const minOffer = formatPrice(record.min_offer);
   const forSale = record.status === "for_sale";
+  const status = STATUS[record.status] ?? { label: record.status, tone: "" };
 
   return (
-    <>
-      <SiteNav showBrowse={Boolean(PORTFOLIO_URL)} />
-      <main>
-        <div className="lander">
-          <section className="lander-hero">
-            {record.category && (
-              <span className="badge" style={{ marginBottom: "1.25rem" }}>
-                {record.category}
-              </span>
-            )}
-            <h1 className="domain">
-              <DomainName domain={record.domain} />
-            </h1>
-            <span className="underline-accent" aria-hidden="true" />
-            <p className="headline">{headline(record.status)}</p>
-            {record.tagline && <p className="tagline">{record.tagline}</p>}
+    <Shell title={record.domain} active={record.domain}>
+      <div className="listing-head">
+        <span className="listing-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18" />
+          </svg>
+        </span>
+        <div>
+          <h1>
+            <DomainName domain={record.domain} />
+          </h1>
+          <div className="pills">
+            <span className={`pill ${status.tone}`}>
+              <span className="dot" aria-hidden="true" />
+              {status.label}
+            </span>
+            {record.category && <span className="pill purple">{record.category}</span>}
+          </div>
+          {record.tagline && <p>{record.tagline}</p>}
+        </div>
+      </div>
 
-            {forSale && (
-              <ul className="perks">
-                {PERKS.map((p) => (
-                  <li key={p.title}>
-                    <span className="icon">{p.svg}</span>
+      <div className="detail-grid">
+        <div className="stack">
+          <section className="card">
+            <div className="card-head">
+              <h2>Listing details</h2>
+            </div>
+            <dl className="kv">
+              <dt>Domain</dt>
+              <dd className="mono">{record.domain}</dd>
+              <dt>Status</dt>
+              <dd>{status.label}</dd>
+              {forSale && (
+                <>
+                  <dt>Price</dt>
+                  <dd className="mono">{price ?? "Open to offers"}</dd>
+                </>
+              )}
+              {record.category && (
+                <>
+                  <dt>Category</dt>
+                  <dd>{record.category}</dd>
+                </>
+              )}
+              <dt>Payment</dt>
+              <dd>Independent escrow</dd>
+              <dt>Buyer fees</dt>
+              <dd>None — seller covers escrow and transfer</dd>
+              <dt>Seller response</dt>
+              <dd>Within {RESPONSE_TIME}</dd>
+            </dl>
+          </section>
+
+          {forSale && (
+            <section className="card">
+              <div className="card-head">
+                <h2>How buying works</h2>
+                <span className="sub">Escrow-protected</span>
+              </div>
+              <ol className="steps">
+                {STEPS.map((s, i) => (
+                  <li key={s.title}>
+                    <span className="num">{i + 1}</span>
                     <div>
-                      <strong>{p.title}</strong>
-                      <span>{p.body}</span>
+                      <strong>{s.title}</strong>
+                      <span>{s.body}</span>
                     </div>
                   </li>
                 ))}
-              </ul>
-            )}
-          </section>
-
-          {forSale ? (
-            <aside className="offer-card" aria-label="Price and offer">
-              <div className="term-bar" aria-hidden="true">
-                <span className="lights">
-                  <i />
-                  <i />
-                  <i />
-                </span>
-                <span className="path">listing / {record.domain}</span>
-                <span className="state">
-                  <span className="pulse-dot green" />
-                  Available
-                </span>
-              </div>
-              <div className="term-body">
-                <div className="price-label">{price ? "Buy it now" : "Open to offers"}</div>
-                <div className="price">{price ?? "Make an offer"}</div>
-                {minOffer && !price && <p className="monthly">Minimum offer: {minOffer}</p>}
-                <hr className="divider" />
-                <h2>{price ? "Buy or make an offer" : "Make an offer"}</h2>
-                <OfferForm domain={record.domain} minOfferLabel={minOffer} responseTime={RESPONSE_TIME} />
-              </div>
-              <div className="term-foot" aria-hidden="true">
-                <span>
-                  Payment <b>escrow</b>
-                </span>
-                <span>
-                  Buyer fees <b>0</b>
-                </span>
-                <span>
-                  Response <b>{RESPONSE_TIME}</b>
-                </span>
-              </div>
-            </aside>
-          ) : (
-            <aside className="card status-card">
-              <span className={`badge ${record.status}`}>
-                {record.status === "sold" ? "Sold" : "Reserved"}
-              </span>
-              <h2 style={{ marginTop: "1rem" }}>
-                {record.status === "sold" ? "This name found its owner" : "Not on the market"}
-              </h2>
-              <p className="muted">
-                {record.status === "sold"
-                  ? "Similar names may still be available in the portfolio."
-                  : "This name is currently reserved and not for sale."}
-              </p>
-              {PORTFOLIO_URL && (
-                <a className="btn block" href={PORTFOLIO_URL}>
-                  Browse available domains
-                </a>
-              )}
-            </aside>
+              </ol>
+            </section>
           )}
         </div>
-      </main>
-      <SiteFooter />
-    </>
+
+        {forSale ? (
+          <aside className="card offer-card" aria-label="Price and offer">
+            <div className="price-label">{price ? "Buy it now" : "Open to offers"}</div>
+            <div className="price">{price ?? "Make an offer"}</div>
+            {minOffer && !price && <p className="monthly">Minimum offer: {minOffer}</p>}
+            <hr className="divider" />
+            <h2>{price ? "Buy or make an offer" : "Make an offer"}</h2>
+            <OfferForm domain={record.domain} minOfferLabel={minOffer} responseTime={RESPONSE_TIME} />
+          </aside>
+        ) : (
+          <aside className="card">
+            <div className="card-head">
+              <h2>{record.status === "sold" ? "This name found its owner" : "Not on the market"}</h2>
+            </div>
+            <p className="muted" style={{ marginTop: 0 }}>
+              {record.status === "sold"
+                ? "Similar names may still be available in the portfolio."
+                : "This name is currently reserved and not for sale."}
+            </p>
+            {PORTFOLIO_URL && (
+              <a className="btn block" href={PORTFOLIO_URL}>
+                Browse available domains
+              </a>
+            )}
+          </aside>
+        )}
+      </div>
+    </Shell>
   );
 }

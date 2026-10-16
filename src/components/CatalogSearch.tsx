@@ -46,7 +46,7 @@ export function CatalogSearch({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           aria-label="Search domains"
-          style={{ flex: "1 1 240px" }}
+          style={{ flex: "1 1 220px" }}
         />
         {categories.length > 1 && (
           <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label="Category">
@@ -63,35 +63,50 @@ export function CatalogSearch({
       {filtered.length === 0 ? (
         <div className="empty">No domains match your search.</div>
       ) : (
-        <div className="grid">
-          {filtered.map((d) => {
-            const [name, tld] = splitDomain(d.domain);
-            return (
-              <a
-                key={d.domain}
-                className="card domain-card"
-                href={`https://${d.domain}/`}
-                aria-label={`${d.domain}${d.priceLabel ? `, ${d.priceLabel}` : ""}`}
-              >
-                <div className="top">
-                  {d.category ? <span className="badge">{d.category}</span> : <span />}
-                  <span className="live">
-                    <span className="pulse-dot green" aria-hidden="true" />
-                    Available
-                  </span>
-                </div>
-                <h3 className="name">
-                  {name}
-                  <span className="tld">{tld}</span>
-                </h3>
-                {d.tagline && <p className="tagline">{d.tagline}</p>}
-                <div className="foot">
-                  <span className="price">{d.priceLabel ?? "Make an offer"}</span>
-                  <span className="go">View →</span>
-                </div>
-              </a>
-            );
-          })}
+        <div className="table-wrap">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Domain</th>
+                <th className="hide-sm">Category</th>
+                <th>Price</th>
+                <th className="hide-sm">Status</th>
+                <th aria-label="Actions" />
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((d) => {
+                const [name, tld] = splitDomain(d.domain);
+                const href = `https://${d.domain}/`;
+                return (
+                  <tr key={d.domain}>
+                    <td>
+                      <a className="domain-link" href={href}>
+                        {name}
+                        <span className="tld">{tld}</span>
+                      </a>
+                      {d.tagline && <span className="domain-sub">{d.tagline}</span>}
+                    </td>
+                    <td className="hide-sm">
+                      {d.category && <span className="pill purple">{d.category}</span>}
+                    </td>
+                    <td className="price-cell">{d.priceLabel ?? "Make an offer"}</td>
+                    <td className="hide-sm">
+                      <span className="pill ok">
+                        <span className="dot" aria-hidden="true" />
+                        Available
+                      </span>
+                    </td>
+                    <td style={{ textAlign: "right" }}>
+                      <a className="row-action" href={href}>
+                        View →
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
     </>
