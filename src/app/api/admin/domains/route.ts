@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin";
+import { seeOther } from "@/lib/http";
 import { upsertDomain } from "@/lib/inventory";
 
 export const runtime = "nodejs";
@@ -29,7 +30,14 @@ export async function POST(request: NextRequest) {
   const action = String(form.get("action") || "save");
   const domain = String(form.get("domain") || "").trim().toLowerCase();
   if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(domain)) {
-    return NextResponse.redirect(new URL("/admin/domains?error=domain", request.url), 303);
+    return seeOther("/admin/domains?error=domain");
+  }
+
+  // The "Add" form must never overwrite an existing listing: it posts every field,
+  // so re-adding a domain would blank its price, tagline, etc.
+  if (action === "add") {
+    const { getDomain } = await import("@/lib/inventory");
+    if (getDomain(domain)) return seeOther("/admin/domains?error=exists");
   }
 
   if (action === "delete") {
@@ -39,7 +47,7 @@ export async function POST(request: NextRequest) {
   } else {
     const status = String(form.get("status") || "draft");
     if (!["draft", "for_sale", "sold", "hold"].includes(status)) {
-      return NextResponse.redirect(new URL("/admin/domains?error=status", request.url), 303);
+      return seeOther("/admin/domains?error=status");
     }
     upsertDomain({
       domain,
@@ -55,5 +63,5 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  return NextResponse.redirect(new URL("/admin/domains", request.url), 303);
+  return seeOther("/admin/domains");
 }

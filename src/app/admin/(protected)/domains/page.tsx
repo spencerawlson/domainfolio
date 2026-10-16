@@ -6,7 +6,19 @@ import { formatPrice } from "@/lib/pricing";
 
 const STATUSES = ["draft", "for_sale", "sold", "hold"] as const;
 
-export default function AdminDomains() {
+const ERRORS: Record<string, string> = {
+  domain: "That doesn't look like a valid domain name.",
+  status: "Unknown status.",
+  exists:
+    "That domain is already in the portfolio. Use its Edit link below to change it — adding it again would overwrite its details.",
+};
+
+interface Props {
+  searchParams: Promise<{ error?: string }>;
+}
+
+export default async function AdminDomains({ searchParams }: Props) {
+  const { error } = await searchParams;
   const domains = listDomains();
 
   return (
@@ -15,10 +27,20 @@ export default function AdminDomains() {
       <main>
         <h1>Domains</h1>
 
+        {error && (
+          <div className="error" role="alert">
+            {ERRORS[error] ?? "Something went wrong. Please try again."}
+          </div>
+        )}
+
         <div className="card" style={{ marginBottom: "2.5rem" }}>
-          <h2 style={{ fontSize: "1.25rem" }}>Add or update a domain</h2>
+          <h2 style={{ fontSize: "1.25rem" }}>Add a new domain</h2>
+          <p className="muted" style={{ marginTop: 0 }}>
+            To change an existing domain (price, lease term, status…), use its <strong>Edit</strong>{" "}
+            link in the list below.
+          </p>
           <form method="POST" action="/api/admin/domains">
-            <input type="hidden" name="action" value="save" />
+            <input type="hidden" name="action" value="add" />
             <div className="field">
               <label htmlFor="d-domain">Domain</label>
               <input id="d-domain" name="domain" required placeholder="example.com" />
@@ -72,7 +94,7 @@ export default function AdminDomains() {
               <textarea id="d-notes" name="notes" rows={2} />
             </div>
             <button className="btn" type="submit">
-              Save domain
+              Add domain
             </button>
           </form>
         </div>

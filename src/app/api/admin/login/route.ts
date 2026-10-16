@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { createSession, SESSION_COOKIE } from "@/lib/auth";
+import { seeOther } from "@/lib/http";
 
 export const runtime = "nodejs";
 
@@ -18,17 +19,17 @@ export async function POST(request: NextRequest) {
   const expected = process.env.ADMIN_PASSWORD || "";
 
   if (expected === "" || !process.env.SESSION_SECRET) {
-    return NextResponse.redirect(new URL("/admin/login?error=config", request.url), 303);
+    return seeOther("/admin/login?error=config");
   }
 
   const ok = timingSafeEqualStrings(password, expected);
 
   if (!ok) {
-    return NextResponse.redirect(new URL("/admin/login?error=1", request.url), 303);
+    return seeOther("/admin/login?error=1");
   }
 
   const { value, maxAge } = createSession();
-  const response = NextResponse.redirect(new URL("/admin", request.url), 303);
+  const response = seeOther("/admin");
   response.cookies.set(SESSION_COOKIE, value, {
     httpOnly: true,
     path: "/",
