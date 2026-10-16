@@ -90,13 +90,38 @@ export function LanderView({ record }: { record: DomainRow }) {
           </section>
 
           {forSale ? (
-            <aside className="card offer-card" aria-label="Price and offer">
-              <div className="price-label">{price ? "Buy it now" : "Open to offers"}</div>
-              <div className="price">{price ?? "Make an offer"}</div>
-              {minOffer && !price && <p className="monthly">Minimum offer: {minOffer}</p>}
-              <hr className="divider" />
-              <h2>{price ? "Buy or make an offer" : "Make an offer"}</h2>
-              <OfferForm domain={record.domain} minOfferLabel={minOffer} responseTime={RESPONSE_TIME} />
+            <aside className="offer-card" aria-label="Price and offer">
+              <div className="term-bar" aria-hidden="true">
+                <span className="lights">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                <span className="path">listing / {record.domain}</span>
+                <span className="state">
+                  <span className="pulse-dot green" />
+                  Available
+                </span>
+              </div>
+              <div className="term-body">
+                <div className="price-label">{price ? "Buy it now" : "Open to offers"}</div>
+                <div className="price">{price ?? "Make an offer"}</div>
+                {minOffer && !price && <p className="monthly">Minimum offer: {minOffer}</p>}
+                <hr className="divider" />
+                <h2>{price ? "Buy or make an offer" : "Make an offer"}</h2>
+                <OfferForm domain={record.domain} minOfferLabel={minOffer} responseTime={RESPONSE_TIME} />
+              </div>
+              <div className="term-foot" aria-hidden="true">
+                <span>
+                  Payment <b>escrow</b>
+                </span>
+                <span>
+                  Buyer fees <b>0</b>
+                </span>
+                <span>
+                  Response <b>{RESPONSE_TIME}</b>
+                </span>
+              </div>
             </aside>
           ) : (
             <aside className="card status-card">

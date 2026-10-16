@@ -24,30 +24,30 @@ export default function Home() {
       <main>
         <section className="hero">
           <div className="eyebrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z" />
-              <circle cx="7.5" cy="7.5" r="1.5" />
-            </svg>
-            Hand-picked names, ready to transfer
+            <span className="pulse-dot" aria-hidden="true" />
+            Brandable .com names · Ready to transfer
           </div>
-          <h1>Find the name your brand deserves</h1>
+          <h1>
+            The name comes first. <span className="kinetic">Make it unforgettable.</span>
+          </h1>
           <p className="lede">
-            Short, brandable domains for startups and products. Make an offer or buy outright,
-            and every sale is completed through an independent escrow service.
+            Short, brandable domains for startups and products. Buy outright or make an offer,
+            and every sale settles through an independent escrow service, so your payment is
+            only released once the domain is in your account.
           </p>
-          <ul className="check-list">
+          <ul className="trust-strip">
             <li>Escrow-protected payment</li>
-            <li>No fees for the buyer</li>
-            <li>Fast, guided transfer</li>
+            <li>No buyer fees</li>
+            <li>Guided transfer</li>
           </ul>
         </section>
 
         <div className="section-head">
           <div>
+            <span className="kicker">Inventory</span>
             <h2>Domains for sale</h2>
-            <span className="underline-accent" aria-hidden="true" />
           </div>
-          <span className="muted" style={{ marginBottom: "1.25rem" }}>
+          <span className="count">
             {domains.length} {domains.length === 1 ? "name" : "names"} available
           </span>
         </div>

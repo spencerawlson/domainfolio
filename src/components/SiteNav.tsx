@@ -8,17 +8,33 @@ export function SiteNav({ showBrowse = false }: { showBrowse?: boolean }) {
     <header className="nav-wrap">
       <nav className="nav">
         <a href={HOME} className="brand">
-          {NAME}
+          <span className="brand-mark" aria-hidden="true">
+            {NAME.charAt(0).toUpperCase()}
+          </span>
+          <BrandWord name={NAME} />
         </a>
         {showBrowse ? (
-          <a href={HOME} className="nav-link">
-            Browse all domains →
+          <a href={HOME} className="btn">
+            Browse all domains
           </a>
         ) : (
-          <span className="nav-link tagline-text muted">Escrow-protected domain sales</span>
+          <span className="nav-link tagline-text">Escrow-protected domain sales</span>
         )}
       </nav>
     </header>
+  );
+}
+
+/** Two-tone wordmark like "Aegis CloudOps": "Domainfolio" → "Domain" + accented "folio". */
+function BrandWord({ name }: { name: string }) {
+  const m = /^(Domain)(.+)$/.exec(name);
+  if (!m) return <span>{name}</span>;
+  // One wrapping span so the brand's flex gap doesn't split the word.
+  return (
+    <span>
+      {m[1]}
+      <span className="accent">{m[2]}</span>
+    </span>
   );
 }
 

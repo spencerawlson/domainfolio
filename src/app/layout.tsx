@@ -1,21 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const name = process.env.PORTFOLIO_NAME || "Domainfolio";
 
-// Same type pairing as Farelune. Self-hosted at build time by next/font:
-// no runtime requests to Google.
-const heading = Fraunces({
+// Same type system as the AegisCloudOps landing page. Self-hosted at build time
+// by next/font: no runtime requests to Google.
+const heading = Inter_Tight({
   subsets: ["latin"],
-  weight: ["600", "700"],
+  weight: ["600", "700", "800"],
   variable: "--font-heading",
   display: "swap",
 });
-const body = Plus_Jakarta_Sans({
+const body = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const mono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-body",
+  weight: ["400", "500"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -25,12 +26,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fdfcf8",
+  themeColor: "#06080d",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${heading.variable} ${body.variable}`}>
+    <html lang="en" className={`${heading.variable} ${body.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

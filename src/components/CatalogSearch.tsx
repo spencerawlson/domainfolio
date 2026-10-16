@@ -73,11 +73,13 @@ export function CatalogSearch({
                 href={`https://${d.domain}/`}
                 aria-label={`${d.domain}${d.priceLabel ? `, ${d.priceLabel}` : ""}`}
               >
-                {d.category && (
-                  <div className="top">
-                    <span className="badge">{d.category}</span>
-                  </div>
-                )}
+                <div className="top">
+                  {d.category ? <span className="badge">{d.category}</span> : <span />}
+                  <span className="live">
+                    <span className="pulse-dot green" aria-hidden="true" />
+                    Available
+                  </span>
+                </div>
                 <h3 className="name">
                   {name}
                   <span className="tld">{tld}</span>
@@ -85,7 +87,7 @@ export function CatalogSearch({
                 {d.tagline && <p className="tagline">{d.tagline}</p>}
                 <div className="foot">
                   <span className="price">{d.priceLabel ?? "Make an offer"}</span>
-                  <span className="go">View domain →</span>
+                  <span className="go">View →</span>
                 </div>
               </a>
             );
