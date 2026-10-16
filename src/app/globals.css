@@ -1,29 +1,31 @@
-/* Visual language follows the DJINN Command Cockpit: dark slate/indigo canvas,
-   glass panels, blue→purple accents, JetBrains Mono for figures and labels. */
+/* Visual language follows Farelune: warm white canvas, morning-sky wash,
+   Fraunces serif headings, Plus Jakarta Sans body, sky blue + sunset coral. */
 :root {
-  --bg: #0b0e1a;
-  --ink: #eef1f6;
-  --ink-soft: rgba(255, 255, 255, 0.68);
-  --ink-faint: rgba(255, 255, 255, 0.5);
-  --line: rgba(255, 255, 255, 0.12);
-  --line-strong: rgba(255, 255, 255, 0.24);
-  --glass: rgba(20, 25, 50, 0.72);
-  --glass-bright: rgba(30, 35, 65, 0.85);
-  --field: rgba(8, 11, 24, 0.7);
-  --blue: #60a5fa;
-  --blue-deep: #3b82f6;
-  --purple: #a78bfa;
-  --accent: var(--blue);
-  --accent-soft: rgba(96, 165, 250, 0.16);
-  --accent-ink: #ffffff;
-  --healthy: #10b981;
-  --danger: #ef4444;
-  --danger-soft: rgba(239, 68, 68, 0.16);
-  --radius: 16px;
-  --glow: 0 0 24px rgba(96, 165, 250, 0.2), inset 0 0 20px rgba(96, 165, 250, 0.04);
-  --font-body: var(--font-sans), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-code: var(--font-mono), "JetBrains Mono", ui-monospace, monospace;
-  color-scheme: dark;
+  --canvas: oklch(0.992 0.006 85);
+  --surface: oklch(1 0 0);
+  --sand: oklch(0.975 0.012 80);
+  --sand-2: oklch(0.94 0.018 80);
+  --ink: oklch(0.25 0.03 250);
+  --ink-soft: oklch(0.48 0.03 250);
+  --line: oklch(0.91 0.012 80);
+  --brand-50: oklch(0.97 0.025 230);
+  --brand-100: oklch(0.93 0.05 230);
+  --brand-300: oklch(0.8 0.1 232);
+  --brand-500: oklch(0.6 0.16 240);
+  --brand-600: oklch(0.52 0.16 245);
+  --brand-700: oklch(0.45 0.14 248);
+  --coral: oklch(0.7 0.17 38);
+  --coral-600: oklch(0.56 0.17 35);
+  --success: oklch(0.6 0.13 155);
+  --danger: oklch(0.55 0.2 27);
+  --danger-soft: oklch(0.97 0.02 27);
+  --radius: 18px;
+  --shadow: 0 1px 2px oklch(0.25 0.03 250 / 0.04), 0 10px 30px -12px oklch(0.45 0.1 245 / 0.18);
+  --shadow-lg: 0 2px 4px oklch(0.25 0.03 250 / 0.04), 0 24px 50px -18px oklch(0.45 0.12 245 / 0.28);
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Arial, sans-serif;
+  --font-serif: var(--font-heading), ui-serif, Georgia, "Times New Roman", serif;
+  color-scheme: light;
 }
 
 * {
@@ -36,43 +38,23 @@ body {
   padding: 0;
   max-width: 100%;
   overflow-x: hidden;
-  background-color: var(--bg);
+  background: var(--canvas);
   color: var(--ink);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Cockpit-style mesh: blue/indigo light pools over the dark canvas. */
+/* Farelune's hero "morning sky" wash, fading into the warm canvas. */
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(1000px 600px at 12% -10%, rgba(59, 130, 246, 0.22), transparent 60%),
-    radial-gradient(900px 600px at 95% 5%, rgba(124, 58, 237, 0.2), transparent 60%),
-    radial-gradient(800px 500px at 50% 110%, rgba(30, 27, 75, 0.7), transparent 70%),
-    linear-gradient(135deg, #0f172a 0%, #13123a 50%, #0b0e1a 100%);
-  background-attachment: fixed;
-}
-
-/* Faint technical grid, like the cockpit's instrument panels. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 75%);
-  z-index: 0;
-}
-
-body > * {
-  position: relative;
-  z-index: 1;
+    radial-gradient(60% 520px at 85% 0%, oklch(0.93 0.06 230 / 0.9), transparent 70%),
+    radial-gradient(45% 420px at 5% 380px, oklch(0.95 0.06 70 / 0.7), transparent 70%),
+    linear-gradient(180deg, oklch(0.97 0.03 225) 0px, var(--canvas) 720px) no-repeat,
+    var(--canvas);
 }
 
 main {
@@ -86,15 +68,16 @@ main {
 h1,
 h2,
 h3 {
-  font-family: var(--font-body);
+  font-family: var(--font-serif);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.025em;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
   margin: 0 0 0.75rem;
+  color: var(--ink);
 }
 
 a {
-  color: var(--blue);
+  color: var(--brand-600);
 }
 
 img {
@@ -102,17 +85,12 @@ img {
 }
 
 :focus-visible {
-  outline: 2px solid var(--blue);
+  outline: 2px solid var(--brand-500);
   outline-offset: 2px;
 }
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: rgba(167, 139, 250, 0.4); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(167, 139, 250, 0.7); }
-
 .mono {
-  font-family: var(--font-code);
+  font-family: var(--font-sans);
 }
 
 /* ---- Building blocks ------------------------------------------------------ */
@@ -121,9 +99,8 @@ img {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 1.5rem;
-  background: var(--glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: var(--surface);
+  box-shadow: var(--shadow);
 }
 
 .btn {
@@ -131,21 +108,20 @@ img {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 12px;
-  background: linear-gradient(90deg, var(--blue-deep), #7c5cf0);
-  color: var(--accent-ink);
-  padding: 0.85rem 1.5rem;
-  font: 600 0.98rem/1.2 var(--font-body);
+  border: 0;
+  border-radius: 999px;
+  background: var(--brand-600);
+  color: #fff;
+  padding: 0.85rem 1.6rem;
+  font: 700 0.95rem/1.2 var(--font-sans);
   cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 0 20px rgba(96, 165, 250, 0.25);
-  transition: box-shadow 0.2s ease, filter 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 6px 16px -6px oklch(0.52 0.16 245 / 0.55);
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 0 28px rgba(96, 165, 250, 0.4);
+  background: var(--brand-700);
 }
 
 .btn:active {
@@ -162,15 +138,14 @@ img {
 }
 
 .btn.secondary {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--surface);
   color: var(--ink);
   border: 1px solid var(--line);
   box-shadow: none;
 }
 
 .btn.secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--line-strong);
+  background: var(--sand);
 }
 
 .field {
@@ -181,13 +156,12 @@ img {
 
 .field label {
   display: block;
-  font-family: var(--font-code);
   font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
 }
 
 .field input,
@@ -199,22 +173,22 @@ img {
   padding: 0.75rem 0.9rem;
   font-size: 1rem;
   font-family: inherit;
-  background: var(--field);
+  background: var(--surface);
   color: var(--ink);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .field input::placeholder,
 .field textarea::placeholder {
-  color: var(--ink-faint);
+  color: oklch(0.65 0.02 250);
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
   outline: none;
-  border-color: rgba(96, 165, 250, 0.6);
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+  border-color: var(--brand-500);
+  box-shadow: 0 0 0 3px var(--brand-100);
 }
 
 .field-row {
@@ -232,14 +206,13 @@ img {
   left: 0.9rem;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--ink-faint);
-  font-family: var(--font-code);
+  color: var(--ink-soft);
+  font-weight: 600;
   pointer-events: none;
 }
 
 .field .input-prefix input {
   padding-left: 1.75rem;
-  font-family: var(--font-code);
 }
 
 .honeypot {
@@ -254,7 +227,7 @@ img {
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.92rem;
+  font-size: 0.93rem;
 }
 
 .table th,
@@ -266,49 +239,47 @@ img {
 }
 
 .table th {
-  font-family: var(--font-code);
-  font-size: 0.7rem;
-  font-weight: 500;
+  font-size: 0.72rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
 }
 
 .table tbody tr:hover {
-  background: rgba(96, 165, 250, 0.07);
+  background: var(--sand);
 }
 
 .badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   border-radius: 999px;
-  padding: 0.18rem 0.7rem;
-  font-family: var(--font-code);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  background: rgba(167, 139, 250, 0.16);
-  color: #ddd6fe;
-  border: 1px solid rgba(167, 139, 250, 0.35);
+  padding: 0.22rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--brand-50);
+  color: var(--brand-700);
+  border: 1px solid var(--brand-100);
 }
 
 .badge.for_sale,
 .badge.new {
-  background: rgba(96, 165, 250, 0.16);
-  color: #bfdbfe;
-  border-color: rgba(96, 165, 250, 0.35);
+  background: oklch(0.96 0.04 155);
+  color: oklch(0.42 0.1 155);
+  border-color: oklch(0.9 0.06 155);
 }
 
 .badge.sold {
   background: var(--danger-soft);
-  color: #fca5a5;
-  border-color: rgba(239, 68, 68, 0.35);
+  color: var(--danger);
+  border-color: oklch(0.9 0.05 27);
 }
 
 .badge.hold {
-  background: rgba(249, 115, 22, 0.16);
-  color: #fdba74;
-  border-color: rgba(249, 115, 22, 0.35);
+  background: oklch(0.97 0.04 70);
+  color: oklch(0.5 0.12 60);
+  border-color: oklch(0.9 0.07 70);
 }
 
 .muted {
@@ -317,18 +288,18 @@ img {
 
 .notice {
   border: 1px solid var(--line);
-  border-left: 3px solid var(--blue);
+  border-left: 3px solid var(--brand-500);
   border-radius: 12px;
   padding: 0.9rem 1.1rem;
-  background: var(--glass);
+  background: var(--sand);
   margin-bottom: 1.5rem;
 }
 
 .error {
-  border: 1px solid rgba(239, 68, 68, 0.35);
+  border: 1px solid oklch(0.88 0.06 27);
   border-left: 3px solid var(--danger);
   background: var(--danger-soft);
-  color: #fecaca;
+  color: oklch(0.42 0.15 27);
   border-radius: 12px;
   padding: 0.9rem 1.1rem;
   margin-bottom: 1.25rem;
@@ -344,74 +315,57 @@ img {
 .toolbar input,
 .toolbar select {
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  padding: 0.75rem 1.1rem;
   font-size: 0.98rem;
   font-family: inherit;
-  background: var(--glass);
+  background: var(--surface);
   color: var(--ink);
-  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
 }
 
 .toolbar input:focus,
 .toolbar select:focus {
   outline: none;
-  border-color: rgba(96, 165, 250, 0.6);
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+  border-color: var(--brand-500);
+  box-shadow: 0 0 0 3px var(--brand-100);
 }
 
-/* ---- Status dots (as in the cockpit) ------------------------------------- */
-
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  display: inline-block;
-  flex-shrink: 0;
-  background: var(--blue);
-  box-shadow: 0 0 6px rgba(96, 165, 250, 0.8);
-  animation: pulse-blue 2s infinite;
+/* Coral underline, as under Farelune's section titles. */
+.underline-accent {
+  display: block;
+  width: 64px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--coral);
+  margin: 0.25rem 0 1.25rem;
 }
 
-.status-dot.healthy {
-  background: var(--healthy);
-  box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
-  animation-name: pulse-green;
+.check-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
 }
 
-.status-dot.offline {
-  background: #6b7280;
-  box-shadow: none;
-  animation: none;
-}
-
-@keyframes pulse-blue {
-  0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(96, 165, 250, 0.8); }
-  50% { opacity: 0.6; box-shadow: 0 0 12px rgba(96, 165, 250, 0.4); }
-}
-
-@keyframes pulse-green {
-  0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(16, 185, 129, 0.8); }
-  50% { opacity: 0.6; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4); }
-}
-
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .status-dot { animation: none; }
-  .domain-card, .lander > * { animation: none !important; }
+.check-list li::before {
+  content: "✓";
+  color: var(--success);
+  font-weight: 700;
+  margin-right: 0.45rem;
 }
 
 /* ---- Navigation & footer -------------------------------------------------- */
 
 .nav-wrap {
   border-bottom: 1px solid var(--line);
-  background: rgba(11, 14, 26, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: oklch(0.992 0.006 85 / 0.85);
+  backdrop-filter: saturate(1.4) blur(10px);
+  -webkit-backdrop-filter: saturate(1.4) blur(10px);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -424,55 +378,64 @@ img {
   gap: 1rem;
   max-width: 1120px;
   margin: 0 auto;
-  padding: 0.85rem 1.25rem;
+  padding: 0.8rem 1.25rem;
 }
 
 .nav .brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-serif);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1.35rem;
   letter-spacing: -0.01em;
   color: var(--ink);
   text-decoration: none;
+  padding-bottom: 0.3rem;
+}
+
+/* Dashed coral trail under the wordmark, like the Farelune logo. */
+.nav .brand::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background-image: repeating-linear-gradient(90deg, var(--coral) 0 5px, transparent 5px 9px);
+  opacity: 0.75;
 }
 
 .brand-mark {
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--blue-deep), #7c5cf0);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 0 14px rgba(96, 165, 250, 0.45);
+  background: var(--brand-600);
   display: grid;
   place-items: center;
   color: #fff;
-  font-family: var(--font-code);
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
 }
 
 .nav-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--ink-soft);
+  color: var(--ink);
   text-decoration: none;
-  font-family: var(--font-code);
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 a.nav-link:hover {
-  color: var(--ink);
+  color: var(--brand-600);
 }
 
 .site-footer {
   border-top: 1px solid var(--line);
   margin-top: 2rem;
-  background: rgba(11, 14, 26, 0.4);
+  background: var(--sand);
 }
 
 .site-footer .inner {
@@ -483,10 +446,8 @@ a.nav-link:hover {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.75rem;
-  font-family: var(--font-code);
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
-  color: var(--ink-faint);
+  font-size: 0.88rem;
+  color: var(--ink-soft);
 }
 
 .site-footer a {
@@ -496,73 +457,52 @@ a.nav-link:hover {
 /* ---- Catalog --------------------------------------------------------------- */
 
 .hero {
-  padding: 2.5rem 0 1rem;
+  padding: 3rem 0 1rem;
 }
 
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  font-family: var(--font-code);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #bfdbfe;
-  border: 1px solid rgba(96, 165, 250, 0.3);
-  background: rgba(96, 165, 250, 0.1);
+  gap: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--brand-700);
+  background: var(--surface);
+  border: 1px solid var(--brand-100);
   border-radius: 999px;
-  padding: 0.35rem 0.85rem;
+  padding: 0.3rem 0.85rem;
   margin-bottom: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.eyebrow svg {
+  color: var(--brand-600);
 }
 
 .hero h1 {
-  font-size: clamp(2.25rem, 6vw, 4rem);
-  max-width: 15ch;
-  background: linear-gradient(90deg, #ffffff 0%, #dbeafe 45%, #c4b5fd 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  max-width: 14ch;
 }
 
 .hero .lede {
-  font-size: 1.1rem;
+  font-size: 1.12rem;
   color: var(--ink-soft);
-  max-width: 60ch;
+  max-width: 58ch;
   margin: 0;
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 200px));
-  gap: 0.75rem;
-  margin-top: 2rem;
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 3rem;
 }
 
-.stat {
-  border: 1px solid var(--line);
-  background: var(--glass);
-  backdrop-filter: blur(16px);
-  border-radius: 14px;
-  padding: 0.85rem 1rem;
-}
-
-.stat .label {
-  display: block;
-  font-family: var(--font-code);
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
-.stat .value {
-  display: block;
-  font-family: var(--font-code);
-  font-weight: 600;
-  font-size: 1.25rem;
-  letter-spacing: -0.02em;
-  color: var(--ink);
+.section-head h2 {
+  font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+  margin: 0;
 }
 
 .grid {
@@ -574,19 +514,16 @@ a.nav-link:hover {
 .domain-card {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.75rem;
   text-decoration: none;
   color: inherit;
-  animation: fade-in-up 0.4s ease-out both;
-  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease,
-    transform 0.25s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .domain-card:hover {
-  border-color: rgba(255, 255, 255, 0.28);
-  background: rgba(35, 40, 72, 0.8);
-  box-shadow: var(--glow);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--brand-100);
 }
 
 .domain-card .top {
@@ -596,21 +533,8 @@ a.nav-link:hover {
   gap: 0.5rem;
 }
 
-.domain-card .live {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  font-family: var(--font-code);
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
 .domain-card .name {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 1.6rem;
   line-height: 1.15;
   word-break: break-all;
   margin: 0;
@@ -618,10 +542,7 @@ a.nav-link:hover {
 
 .domain-card .name .tld,
 .lander-hero .domain .tld {
-  background: linear-gradient(90deg, var(--blue), var(--purple));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--brand-600);
 }
 
 .domain-card .tagline {
@@ -641,64 +562,48 @@ a.nav-link:hover {
 }
 
 .domain-card .price {
-  font-family: var(--font-code);
   font-size: 1.2rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
 .domain-card .go {
-  color: var(--blue);
-  font-family: var(--font-code);
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  color: var(--brand-600);
+  font-weight: 700;
+  font-size: 0.9rem;
 }
 
 .empty {
   text-align: center;
   padding: 3rem 1rem;
-  border: 1px dashed var(--line-strong);
+  border: 1px dashed var(--sand-2);
   border-radius: var(--radius);
   color: var(--ink-soft);
-  background: rgba(20, 25, 50, 0.4);
+  background: var(--sand);
 }
 
 /* ---- Lander ---------------------------------------------------------------- */
 
 .lander {
   display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
   gap: 3rem;
   align-items: start;
   padding-top: 2rem;
 }
 
-.lander > * {
-  animation: fade-in-up 0.4s ease-out both;
-}
-
 .lander-hero .domain {
-  font-size: clamp(2.5rem, 7.5vw, 5rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  font-size: clamp(2.6rem, 7vw, 4.75rem);
   line-height: 1.02;
-  margin: 0 0 1rem;
+  letter-spacing: -0.025em;
+  margin: 0.5rem 0 0;
   word-break: break-all;
-  text-shadow: 0 0 40px rgba(96, 165, 250, 0.25);
 }
 
 .lander-hero .headline {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: var(--font-code);
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #bfdbfe;
-  margin-bottom: 1.25rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.5rem;
 }
 
 .lander-hero .tagline {
@@ -711,7 +616,7 @@ a.nav-link:hover {
 .perks {
   list-style: none;
   padding: 0;
-  margin: 2.25rem 0 0;
+  margin: 2rem 0 0;
   display: grid;
   gap: 0.75rem;
 }
@@ -722,26 +627,25 @@ a.nav-link:hover {
   gap: 0.9rem;
   align-items: start;
   border: 1px solid var(--line);
-  background: rgba(20, 25, 50, 0.5);
-  backdrop-filter: blur(12px);
+  background: var(--surface);
   border-radius: 14px;
-  padding: 0.9rem 1rem;
+  padding: 1rem;
+  box-shadow: var(--shadow);
 }
 
 .perks .icon {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
-  background: rgba(96, 165, 250, 0.12);
-  border: 1px solid rgba(96, 165, 250, 0.3);
-  color: var(--blue);
+  border-radius: 12px;
+  background: var(--brand-50);
+  color: var(--brand-600);
   display: grid;
   place-items: center;
 }
 
 .perks strong {
   display: block;
-  font-size: 0.95rem;
+  font-size: 0.96rem;
 }
 
 .perks span {
@@ -753,70 +657,58 @@ a.nav-link:hover {
   position: sticky;
   top: 5.5rem;
   padding: 1.75rem;
-  background: var(--glass-bright);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  box-shadow: var(--glow);
+  border-radius: 22px;
+  box-shadow: var(--shadow-lg);
 }
 
 .offer-card .price-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-code);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ink-faint);
+  color: var(--ink-soft);
 }
 
 .offer-card .price {
-  font-family: var(--font-code);
-  font-size: 2.6rem;
-  font-weight: 600;
-  letter-spacing: -0.03em;
+  font-family: var(--font-serif);
+  font-size: 2.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.1;
-  margin: 0.35rem 0 0.25rem;
+  margin: 0.25rem 0 0.25rem;
 }
 
 .offer-card .monthly {
   color: var(--ink-soft);
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
 }
 
 .offer-card .divider {
   border: 0;
-  height: 3px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--blue-deep), var(--purple), transparent);
-  opacity: 0.6;
+  border-top: 1px solid var(--line);
   margin: 1.4rem 0;
 }
 
 .offer-card h2 {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   margin-bottom: 1rem;
 }
 
 .fine {
-  font-size: 0.78rem;
-  color: var(--ink-faint);
+  font-size: 0.8rem;
+  color: var(--ink-soft);
   text-align: center;
   margin: 0.85rem 0 0;
 }
 
 .status-card {
   padding: 2rem;
-  background: var(--glass-bright);
-  border-radius: 20px;
+  border-radius: 22px;
 }
 
 .status-card h2 {
-  font-size: 1.35rem;
+  font-size: 1.45rem;
 }
 
 /* ---- Simple centered pages ------------------------------------------------- */
@@ -829,17 +721,21 @@ a.nav-link:hover {
 }
 
 .center-page h1 {
-  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-size: clamp(2rem, 5vw, 2.85rem);
 }
 
 .center-page p {
-  font-size: 1.05rem;
+  font-size: 1.08rem;
+}
+
+.center-page .underline-accent {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media (max-width: 1023px) {
   .grid > *,
-  .lander > *,
-  .stats > * {
+  .lander > * {
     min-width: 0;
   }
 }
@@ -861,24 +757,12 @@ a.nav-link:hover {
     padding: 1.5rem 1rem 3rem;
   }
 
-  body {
-    background-attachment: scroll;
-  }
-
   .nav .tagline-text {
     display: none;
   }
 
   .field-row {
     grid-template-columns: 1fr;
-  }
-
-  .stats {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .stat .value {
-    font-size: 1.05rem;
   }
 
   .table-wrap {

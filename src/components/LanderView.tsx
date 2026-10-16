@@ -70,13 +70,8 @@ export function LanderView({ record }: { record: DomainRow }) {
             <h1 className="domain">
               <DomainName domain={record.domain} />
             </h1>
-            <p className="headline">
-              <span
-                className={`status-dot ${forSale ? "healthy" : "offline"}`}
-                aria-hidden="true"
-              />
-              {headline(record.status)}
-            </p>
+            <span className="underline-accent" aria-hidden="true" />
+            <p className="headline">{headline(record.status)}</p>
             {record.tagline && <p className="tagline">{record.tagline}</p>}
 
             {forSale && (
@@ -96,10 +91,7 @@ export function LanderView({ record }: { record: DomainRow }) {
 
           {forSale ? (
             <aside className="card offer-card" aria-label="Price and offer">
-              <div className="price-label">
-                <span className="status-dot" aria-hidden="true" />
-                {price ? "Buy it now" : "Open to offers"}
-              </div>
+              <div className="price-label">{price ? "Buy it now" : "Open to offers"}</div>
               <div className="price">{price ?? "Make an offer"}</div>
               {minOffer && !price && <p className="monthly">Minimum offer: {minOffer}</p>}
               <hr className="divider" />

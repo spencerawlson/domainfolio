@@ -8,9 +8,6 @@ export function SiteNav({ showBrowse = false }: { showBrowse?: boolean }) {
     <header className="nav-wrap">
       <nav className="nav">
         <a href={HOME} className="brand">
-          <span className="brand-mark" aria-hidden="true">
-            {NAME.charAt(0).toUpperCase()}
-          </span>
           {NAME}
         </a>
         {showBrowse ? (
@@ -18,10 +15,7 @@ export function SiteNav({ showBrowse = false }: { showBrowse?: boolean }) {
             Browse all domains →
           </a>
         ) : (
-          <span className="nav-link tagline-text">
-            <span className="status-dot healthy" aria-hidden="true" />
-            Escrow-protected sales
-          </span>
+          <span className="nav-link tagline-text muted">Escrow-protected domain sales</span>
         )}
       </nav>
     </header>

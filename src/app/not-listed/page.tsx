@@ -9,8 +9,8 @@ export default function NotListed() {
       <SiteNav />
       <main>
         <div className="center-page">
-          <div className="eyebrow">Not listed</div>
           <h1>This domain is not listed for sale</h1>
+          <span className="underline-accent" aria-hidden="true" />
           <p className="muted">
             The name you are looking for is not part of the {NAME} portfolio. It may belong to
             someone else, or it may simply not be on the market right now.
