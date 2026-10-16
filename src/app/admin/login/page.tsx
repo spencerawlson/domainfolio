@@ -1,3 +1,5 @@
+import { LogoMark } from "@/components/LogoMark";
+
 interface Props {
   searchParams: Promise<{ error?: string }>;
 }
@@ -10,9 +12,9 @@ export default async function AdminLogin({ searchParams }: Props) {
     <main style={{ display: "grid", placeItems: "center", minHeight: "100vh", padding: "1.25rem" }}>
       <div className="card" style={{ width: "100%", maxWidth: "400px", padding: "2rem" }}>
         <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-          <span className="brand-mark" style={{ margin: "0 auto 0.9rem", width: 40, height: 40, fontSize: "1.1rem" }}>
-            {NAME.charAt(0).toUpperCase()}
-          </span>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.9rem" }}>
+            <LogoMark size={40} />
+          </div>
           <h1 style={{ fontSize: "1.35rem", marginBottom: "0.25rem" }}>{NAME} Admin</h1>
           <p className="muted mono" style={{ margin: 0, fontSize: "0.75rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>
             Operator access only

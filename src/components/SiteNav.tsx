@@ -1,5 +1,6 @@
 import { listForSale } from "@/lib/inventory";
 import { formatPrice } from "@/lib/pricing";
+import { LogoMark } from "./LogoMark";
 
 const NAME = process.env.PORTFOLIO_NAME || "Domainfolio";
 // On a lander host "/" is the lander itself, so links back to the catalog use
@@ -37,9 +38,7 @@ export function Shell({
     <div className="shell">
       <aside className="sidebar" aria-label="Portfolio">
         <a href={HOME} className="side-brand">
-          <span className="brand-mark" aria-hidden="true">
-            {NAME.charAt(0).toUpperCase()}
-          </span>
+          <LogoMark size={30} />
           <span>
             <strong>{NAME}</strong>
             <small>Domain portfolio</small>
@@ -83,9 +82,7 @@ export function Shell({
         <header className="topbar">
           <div className="crumbs">
             <a href={HOME} className="topbar-brand">
-              <span className="brand-mark" aria-hidden="true">
-                {NAME.charAt(0).toUpperCase()}
-              </span>
+              <LogoMark size={26} />
             </a>
             <a href={HOME} className="root">
               {NAME}
