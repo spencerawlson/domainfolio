@@ -1,5 +1,5 @@
 import type { DomainRow } from "@/lib/db";
-import { formatPrice } from "@/lib/pricing";
+import { formatLeaseMonthly, formatPrice } from "@/lib/pricing";
 import { OfferForm } from "./OfferForm";
 import { DomainName, Shell } from "./SiteNav";
 
@@ -26,6 +26,7 @@ const STEPS = [
  */
 export function LanderView({ record }: { record: DomainRow }) {
   const price = formatPrice(record.price);
+  const lease = formatLeaseMonthly(record.price, record.lease_months);
   const minOffer = formatPrice(record.min_offer);
   const forSale = record.status === "for_sale";
   const status = STATUS[record.status] ?? { label: record.status, tone: "" };
@@ -111,6 +112,11 @@ export function LanderView({ record }: { record: DomainRow }) {
           <aside className="card offer-card" aria-label="Price and offer">
             <div className="price-label">{price ? "Buy it now" : "Open to offers"}</div>
             <div className="price">{price ?? "Make an offer"}</div>
+            {lease && record.lease_months && (
+              <p className="monthly">
+                or lease-to-own from {lease}/mo for {record.lease_months} months via Afternic
+              </p>
+            )}
             {minOffer && !price && <p className="monthly">Minimum offer: {minOffer}</p>}
             <hr className="divider" />
             <h2>{price ? "Buy or make an offer" : "Make an offer"}</h2>

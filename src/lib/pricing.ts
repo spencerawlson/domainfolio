@@ -13,13 +13,25 @@ export function formatPrice(amount: number | null | undefined, currency?: string
   }
 }
 
-/** Monthly payment shown beside a buy-it-now price: ceil(price / 12). */
-export function monthlySplit(amount: number | null | undefined): number | null {
+/**
+ * Monthly lease-to-own payment for a buy-it-now price over a stated term:
+ * ceil(price / months). The term comes from the domain's own listing terms
+ * (e.g. its Afternic lease-to-own term) — never assume a fixed split.
+ */
+export function leaseMonthly(
+  amount: number | null | undefined,
+  months: number | null | undefined,
+): number | null {
   if (amount === null || amount === undefined || Number.isNaN(amount) || amount <= 0) return null;
-  return Math.ceil(amount / 12);
+  if (months === null || months === undefined || !Number.isInteger(months) || months < 1) return null;
+  return Math.ceil(amount / months);
 }
 
-export function formatMonthly(amount: number | null | undefined, currency?: string): string | null {
-  const m = monthlySplit(amount);
+export function formatLeaseMonthly(
+  amount: number | null | undefined,
+  months: number | null | undefined,
+  currency?: string,
+): string | null {
+  const m = leaseMonthly(amount, months);
   return m === null ? null : formatPrice(m, currency);
 }

@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS domains (
   status TEXT NOT NULL DEFAULT 'draft',
   price REAL NULL,
   min_offer REAL NULL,
+  lease_months INTEGER NULL,
   category TEXT NULL,
   tagline TEXT NULL,
   notes TEXT NULL,
@@ -62,6 +63,11 @@ export function getDb(): Database.Database {
     db = new Database(file);
     db.pragma("journal_mode = WAL");
     db.exec(SCHEMA);
+    // Migration: databases created before lease-to-own support lack the column.
+    const cols = db.prepare(`PRAGMA table_info(domains)`).all() as { name: string }[];
+    if (!cols.some((c) => c.name === "lease_months")) {
+      db.exec(`ALTER TABLE domains ADD COLUMN lease_months INTEGER NULL`);
+    }
   }
   return db;
 }
@@ -74,6 +80,7 @@ export interface DomainRow {
   status: DomainStatus;
   price: number | null;
   min_offer: number | null;
+  lease_months: number | null;
   category: string | null;
   tagline: string | null;
   notes: string | null;

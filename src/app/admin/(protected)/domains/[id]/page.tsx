@@ -38,7 +38,7 @@ export default async function EditDomain({ params }: Props) {
                 <input id="e-category" name="category" defaultValue={record.category ?? ""} />
               </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1rem" }}>
               <div className="field">
                 <label htmlFor="e-price">Buy-it-now price</label>
                 <input
@@ -59,6 +59,18 @@ export default async function EditDomain({ params }: Props) {
                   min="0"
                   step="1"
                   defaultValue={record.min_offer ?? ""}
+                />
+              </div>
+              <div className="field">
+                <label htmlFor="e-lease">Lease-to-own months (Afternic)</label>
+                <input
+                  id="e-lease"
+                  name="lease_months"
+                  type="number"
+                  min="1"
+                  max="120"
+                  step="1"
+                  defaultValue={record.lease_months ?? ""}
                 />
               </div>
             </div>
