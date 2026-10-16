@@ -11,7 +11,7 @@ so traffic informs pricing.
 - **Middleware** (`src/middleware.ts`) normalizes the Host header (lowercase, strips
   `www.` and the port), then consults the inventory:
   - host is `PORTFOLIO_HOST` → the catalog (all for-sale domains, search + category filter)
-  - host matches a `for_sale` domain → its lander, with price, monthly-payment line, and
+  - host matches a `for_sale` domain → its lander, with price and
     offer form
   - host matches a `sold` / `hold` domain → a simple status page
   - host matches nothing → `/not-listed`

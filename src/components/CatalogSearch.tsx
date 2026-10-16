@@ -64,7 +64,7 @@ export function CatalogSearch({
         <div className="empty">No domains match your search.</div>
       ) : (
         <div className="grid">
-          {filtered.map((d) => {
+          {filtered.map((d, i) => {
             const [name, tld] = splitDomain(d.domain);
             return (
               <a
@@ -72,12 +72,15 @@ export function CatalogSearch({
                 className="card domain-card"
                 href={`https://${d.domain}/`}
                 aria-label={`${d.domain}${d.priceLabel ? `, ${d.priceLabel}` : ""}`}
+                style={{ animationDelay: `${Math.min(i, 8) * 60}ms` }}
               >
-                {d.category && (
-                  <span className="badge" style={{ alignSelf: "flex-start" }}>
-                    {d.category}
+                <div className="top">
+                  {d.category ? <span className="badge">{d.category}</span> : <span />}
+                  <span className="live">
+                    <span className="status-dot healthy" aria-hidden="true" />
+                    Available
                   </span>
-                )}
+                </div>
                 <h3 className="name">
                   {name}
                   <span className="tld">{tld}</span>

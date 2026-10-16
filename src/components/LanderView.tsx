@@ -1,5 +1,5 @@
 import type { DomainRow } from "@/lib/db";
-import { formatMonthly, formatPrice } from "@/lib/pricing";
+import { formatPrice } from "@/lib/pricing";
 import { OfferForm } from "./OfferForm";
 import { DomainName, SiteFooter, SiteNav } from "./SiteNav";
 
@@ -53,7 +53,6 @@ const PERKS = [
  */
 export function LanderView({ record }: { record: DomainRow }) {
   const price = formatPrice(record.price);
-  const monthly = formatMonthly(record.price);
   const minOffer = formatPrice(record.min_offer);
   const forSale = record.status === "for_sale";
 
@@ -71,7 +70,13 @@ export function LanderView({ record }: { record: DomainRow }) {
             <h1 className="domain">
               <DomainName domain={record.domain} />
             </h1>
-            <p className="headline">{headline(record.status)}</p>
+            <p className="headline">
+              <span
+                className={`status-dot ${forSale ? "healthy" : "offline"}`}
+                aria-hidden="true"
+              />
+              {headline(record.status)}
+            </p>
             {record.tagline && <p className="tagline">{record.tagline}</p>}
 
             {forSale && (
@@ -91,9 +96,11 @@ export function LanderView({ record }: { record: DomainRow }) {
 
           {forSale ? (
             <aside className="card offer-card" aria-label="Price and offer">
-              <div className="price-label">{price ? "Buy it now" : "Open to offers"}</div>
+              <div className="price-label">
+                <span className="status-dot" aria-hidden="true" />
+                {price ? "Buy it now" : "Open to offers"}
+              </div>
               <div className="price">{price ?? "Make an offer"}</div>
-              {monthly && <p className="monthly">or 12 monthly payments of {monthly}</p>}
               {minOffer && !price && <p className="monthly">Minimum offer: {minOffer}</p>}
               <hr className="divider" />
               <h2>{price ? "Buy or make an offer" : "Make an offer"}</h2>

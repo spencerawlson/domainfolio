@@ -23,18 +23,28 @@ export default function Home() {
       <SiteNav />
       <main>
         <section className="hero">
-          <div className="eyebrow">Available now</div>
+          <div className="eyebrow">
+            <span className="status-dot healthy" aria-hidden="true" />
+            Portfolio online
+          </div>
           <h1>Premium domains for sale</h1>
           <p className="lede">
             Short, brandable names ready to transfer. Every purchase goes through an independent
             escrow service, so your payment is only released once the domain is in your account.
           </p>
           <div className="stats">
-            <span className="stat">
-              <strong>{domains.length}</strong> {domains.length === 1 ? "name" : "names"} available
-            </span>
-            <span className="stat">Escrow-protected</span>
-            <span className="stat">Fast transfer</span>
+            <div className="stat">
+              <span className="label">Available</span>
+              <span className="value">{domains.length}</span>
+            </div>
+            <div className="stat">
+              <span className="label">Payment</span>
+              <span className="value">Escrow</span>
+            </div>
+            <div className="stat">
+              <span className="label">Transfer</span>
+              <span className="value">Fast</span>
+            </div>
           </div>
         </section>
 

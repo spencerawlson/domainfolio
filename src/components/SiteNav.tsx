@@ -18,7 +18,10 @@ export function SiteNav({ showBrowse = false }: { showBrowse?: boolean }) {
             Browse all domains →
           </a>
         ) : (
-          <span className="nav-link tagline-text">Premium domains, safely transferred</span>
+          <span className="nav-link tagline-text">
+            <span className="status-dot healthy" aria-hidden="true" />
+            Escrow-protected sales
+          </span>
         )}
       </nav>
     </header>
