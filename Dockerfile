@@ -13,19 +13,19 @@ COPY . .
 RUN npm run build
 
 # ---- Production ---------------------------------------------------------------
+# next.config.ts sets output: "standalone": the build emits a self-contained
+# server.js plus only the node_modules it traced (better-sqlite3 included).
 FROM node:22-bookworm-slim AS runner
 
 ENV NODE_ENV=production
 ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 ENV DATA_DIR=/app/data
 
 WORKDIR /app
-COPY --from=builder /app/package.json /app/package-lock.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.ts ./next.config.ts
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
 
 RUN mkdir -p /app/data
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["node", "server.js"]

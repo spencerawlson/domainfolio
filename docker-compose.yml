@@ -10,10 +10,23 @@ services:
       PORT: "3000"
       DATA_DIR: /app/data
     volumes:
-      - domainfolio-data:/app/data
+      # Bind mount so the SQLite file is easy to back up; :Z relabels it for SELinux.
+      - ./data:/app/data:Z
     ports:
-      - "8096:3000"
+      # Loopback only: the public path is the Cloudflare Tunnel below.
+      - "127.0.0.1:8096:3000"
     restart: unless-stopped
 
-volumes:
-  domainfolio-data:
+  # Cloudflare Tunnel for the portfolio domains. Host networking so the
+  # dashboard's public hostnames can target http://localhost:8096.
+  # tunnel.env holds TUNNEL_TOKEN=... (keep it out of git, chmod 600).
+  domainfolio-tunnel:
+    image: cloudflare/cloudflared:2026.9.3
+    container_name: domainfolio-tunnel
+    command: tunnel --no-autoupdate run
+    env_file:
+      - tunnel.env
+    network_mode: host
+    depends_on:
+      - domainfolio-web
+    restart: unless-stopped

@@ -16,6 +16,8 @@ export async function notifyOffer(offer: ValidatedOffer): Promise<void> {
     await transporter.sendMail({
       from: SMTP_USER || `Domainfolio <no-reply@${SMTP_HOST}>`,
       to: OFFERS_NOTIFY_EMAIL,
+      // Replying to the notification goes straight to the buyer.
+      replyTo: offer.email,
       subject: `New offer on ${offer.domain}${amount}`,
       text: [
         `Domain: ${offer.domain}`,

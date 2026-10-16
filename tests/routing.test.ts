@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { normalizeHost, rewritePath, routeHost } from "../src/lib/routing";
+import {
+  adminAllowedOnHost,
+  isAdminPath,
+  normalizeHost,
+  rewritePath,
+  routeHost,
+} from "../src/lib/routing";
 
 const ctx = (domains: Record<string, string>) => ({
   portfolioHost: "portfolio.example",
@@ -70,5 +76,24 @@ describe("rewritePath", () => {
     expect(rewritePath({ type: "sold", domain: "a.com" })).toBe("/sold/a.com");
     expect(rewritePath({ type: "hold", domain: "a.com" })).toBe("/hold/a.com");
     expect(rewritePath({ type: "unknown", host: "x.org" })).toBe("/not-listed");
+  });
+});
+
+describe("admin host restriction", () => {
+  it("recognizes admin UI and admin API paths only", () => {
+    expect(isAdminPath("/admin")).toBe(true);
+    expect(isAdminPath("/admin/domains/3")).toBe(true);
+    expect(isAdminPath("/api/admin/login")).toBe(true);
+    expect(isAdminPath("/api/offers")).toBe(false);
+    expect(isAdminPath("/administrator")).toBe(false);
+    expect(isAdminPath("/")).toBe(false);
+  });
+
+  it("allows admin on the portfolio host and loopback, not on landers", () => {
+    expect(adminAllowedOnHost("domainfolio.site", "domainfolio.site")).toBe(true);
+    expect(adminAllowedOnHost("WWW.Domainfolio.site:443", "domainfolio.site")).toBe(true);
+    expect(adminAllowedOnHost("localhost:8096", "domainfolio.site")).toBe(true);
+    expect(adminAllowedOnHost("axionory.com", "domainfolio.site")).toBe(false);
+    expect(adminAllowedOnHost(null, "domainfolio.site")).toBe(false);
   });
 });

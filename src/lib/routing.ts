@@ -45,6 +45,20 @@ export function routeHost(rawHost: string | null | undefined, ctx: RouteContext)
   }
 }
 
+/** Admin UI and admin API paths. */
+export function isAdminPath(pathname: string): boolean {
+  return /^\/(api\/)?admin(\/|$)/.test(pathname);
+}
+
+/**
+ * Admin is served only on the portfolio host (plus loopback, for SSH-tunnel
+ * access on the server), never on a lander domain.
+ */
+export function adminAllowedOnHost(rawHost: string | null | undefined, portfolioHost: string): boolean {
+  const host = normalizeHost(rawHost);
+  return host === normalizeHost(portfolioHost) || host === "localhost" || host === "127.0.0.1";
+}
+
 /** Destination path for a routing decision (used by middleware rewrites). */
 export function rewritePath(decision: RouteDecision): string | null {
   switch (decision.type) {
