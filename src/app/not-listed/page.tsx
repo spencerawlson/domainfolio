@@ -1,10 +1,20 @@
+import { headers } from "next/headers";
+import type { Metadata } from "next";
 import { Shell } from "@/components/SiteNav";
+import { portfolioOrigin } from "@/lib/seo";
 
 // The shell lists live inventory, so render per request.
 export const dynamic = "force-dynamic";
 
 const NAME = process.env.PORTFOLIO_NAME || "Domainfolio";
 const URL = process.env.PORTFOLIO_URL || "";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const h = await headers();
+  const origin = portfolioOrigin(process.env.PORTFOLIO_URL, h.get("host"));
+  if (!origin) return {};
+  return { alternates: { canonical: `${origin}/not-listed` } };
+}
 
 export default function NotListed() {
   return (

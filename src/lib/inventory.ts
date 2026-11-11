@@ -20,6 +20,21 @@ export function listForSale(): DomainRow[] {
     .all() as DomainRow[];
 }
 
+/**
+ * Public catalog: domains for sale plus reserved (hold) domains, which stay
+ * listed with a Reserved badge and no buy/offer path. Sold and draft domains
+ * are not listed. For-sale rows come first.
+ */
+export function listCatalog(): DomainRow[] {
+  return getDb()
+    .prepare(
+      `SELECT * FROM domains WHERE status IN ('for_sale', 'hold') ORDER BY
+         CASE status WHEN 'for_sale' THEN 0 WHEN 'hold' THEN 1 END,
+         domain ASC`,
+    )
+    .all() as DomainRow[];
+}
+
 export function getDomain(domain: string): DomainRow | undefined {
   return getDb().prepare(`SELECT * FROM domains WHERE domain = ?`).get(domain) as
     | DomainRow
@@ -94,7 +109,7 @@ export function deleteDomain(id: number): void {
 export function categories(): string[] {
   const rows = getDb()
     .prepare(
-      `SELECT DISTINCT category FROM domains WHERE status = 'for_sale' AND category IS NOT NULL AND category <> '' ORDER BY category ASC`,
+      `SELECT DISTINCT category FROM domains WHERE status IN ('for_sale', 'hold') AND category IS NOT NULL AND category <> '' ORDER BY category ASC`,
     )
     .all() as { category: string }[];
   return rows.map((r) => r.category);

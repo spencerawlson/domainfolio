@@ -46,6 +46,8 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   // Everything except static assets runs through the middleware; admin and API
-  // paths are handled explicitly above.
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  // paths are handled explicitly above. robots.txt and sitemap.xml also skip
+  // the middleware so Next serves them directly on every host — otherwise a
+  // lander host would rewrite them to the lander page.
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)"],
 };

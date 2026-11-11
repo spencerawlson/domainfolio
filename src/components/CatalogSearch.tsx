@@ -8,6 +8,8 @@ export interface CatalogDomain {
   priceLabel: string | null;
   category: string | null;
   tagline: string | null;
+  /** "for_sale" or "hold" (reserved). Reserved rows show a badge, no price. */
+  status: string;
 }
 
 function splitDomain(domain: string): [string, string] {
@@ -90,12 +92,21 @@ export function CatalogSearch({
                     <td className="hide-sm">
                       {d.category && <span className="pill purple">{d.category}</span>}
                     </td>
-                    <td className="price-cell">{d.priceLabel ?? "Make an offer"}</td>
+                    <td className="price-cell">
+                      {d.status === "hold" ? "Reserved" : (d.priceLabel ?? "Make an offer")}
+                    </td>
                     <td className="hide-sm">
-                      <span className="pill ok">
-                        <span className="dot" aria-hidden="true" />
-                        Available
-                      </span>
+                      {d.status === "hold" ? (
+                        <span className="pill warn">
+                          <span className="dot" aria-hidden="true" />
+                          Reserved
+                        </span>
+                      ) : (
+                        <span className="pill ok">
+                          <span className="dot" aria-hidden="true" />
+                          Available
+                        </span>
+                      )}
                     </td>
                     <td style={{ textAlign: "right" }}>
                       <a className="row-action" href={href}>

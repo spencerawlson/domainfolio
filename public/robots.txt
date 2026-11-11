@@ -1,0 +1,8 @@
+# Domainfolio origin robots.txt.
+# Cloudflare prepends its managed content-signals block above this file
+# when serving /robots.txt — do not repeat the Content-Signal lines here.
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Sitemap: https://domainfolio.site/sitemap.xml
