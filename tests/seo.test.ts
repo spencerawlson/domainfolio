@@ -32,36 +32,71 @@ describe("landerCanonical", () => {
 });
 
 describe("sitemapEntries", () => {
-  it("lists the catalog plus one entry per for-sale lander, each on its own host", () => {
+  const catalog = [
+    { domain: "axionory.com", status: "hold" },
+    { domain: "opsnestly.com", status: "for_sale" },
+    { domain: "trivantaq.com", status: "for_sale" },
+  ];
+
+  it("on the portfolio host lists only same-host URLs: catalog + hold pages", () => {
     expect(
-      sitemapEntries("https://domainfolio.site", [
-        { domain: "axionory.com" },
-        { domain: "opsnestly.com" },
-      ]),
+      sitemapEntries("domainfolio.site", "https://domainfolio.site", catalog),
     ).toEqual([
       { url: "https://domainfolio.site/" },
-      { url: "https://axionory.com/" },
-      { url: "https://opsnestly.com/" },
+      { url: "https://domainfolio.site/hold/axionory.com/" },
     ]);
   });
 
-  it("includes a reserved (hold) lander: it stays listed with its own canonical", () => {
+  it("never lists a lander URL on the portfolio host", () => {
+    const urls = sitemapEntries(
+      "domainfolio.site",
+      "https://domainfolio.site",
+      catalog,
+    ).map((e) => e.url);
+    for (const u of urls) {
+      expect(u.startsWith("https://domainfolio.site/")).toBe(true);
+    }
+  });
+
+  it("on the portfolio host lists a /sold/ page for a sold domain", () => {
     expect(
-      sitemapEntries("https://domainfolio.site", [
-        { domain: "axionory.com", status: "hold" },
-        { domain: "opsnestly.com" },
+      sitemapEntries("domainfolio.site", "https://domainfolio.site", [
+        { domain: "brightquill.io", status: "sold" },
       ]),
     ).toEqual([
       { url: "https://domainfolio.site/" },
-      { url: "https://axionory.com/" },
-      { url: "https://opsnestly.com/" },
+      { url: "https://domainfolio.site/sold/brightquill.io/" },
     ]);
   });
 
-  it("lists only the catalog when nothing is for sale", () => {
-    expect(sitemapEntries("https://domainfolio.site", [])).toEqual([
+  it("lists only the catalog on the portfolio host when nothing is listed", () => {
+    expect(sitemapEntries("domainfolio.site", "https://domainfolio.site", [])).toEqual([
       { url: "https://domainfolio.site/" },
     ]);
+  });
+
+  it("on a hold lander host lists only that lander's own root", () => {
+    expect(
+      sitemapEntries("axionory.com", "https://domainfolio.site", catalog),
+    ).toEqual([{ url: "https://axionory.com/" }]);
+  });
+
+  it("on a for-sale lander host lists only that lander's own root", () => {
+    expect(
+      sitemapEntries("opsnestly.com", "https://domainfolio.site", catalog),
+    ).toEqual([{ url: "https://opsnestly.com/" }]);
+  });
+
+  it("on an unknown host lists only that host's own root", () => {
+    expect(
+      sitemapEntries("ventoryn.app", "https://domainfolio.site", catalog),
+    ).toEqual([{ url: "https://ventoryn.app/" }]);
+  });
+
+  it("normalizes the request host (case, port, www)", () => {
+    expect(
+      sitemapEntries("WWW.Axionory.COM:3000", "https://domainfolio.site", catalog),
+    ).toEqual([{ url: "https://axionory.com/" }]);
   });
 });
 
