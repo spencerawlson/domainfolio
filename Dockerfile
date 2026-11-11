@@ -25,6 +25,7 @@ ENV DATA_DIR=/app/data
 WORKDIR /app
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
 RUN mkdir -p /app/data
 EXPOSE 3000
