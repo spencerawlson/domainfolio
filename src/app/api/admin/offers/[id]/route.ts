@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin";
+import { seeOther } from "@/lib/http";
 import { setOfferStatus } from "@/lib/inventory";
 
 export const runtime = "nodejs";
@@ -20,6 +21,5 @@ export async function POST(
   }
 
   setOfferStatus(Number(id), status);
-  const back = new URL("/admin/offers", request.url);
-  return NextResponse.redirect(back, 303);
+  return seeOther("/admin/offers");
 }
