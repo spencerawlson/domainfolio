@@ -32,21 +32,49 @@ export function landerCanonical(domain: string): string {
 
 export interface SitemapDomain {
   domain: string;
+  status?: string;
 }
 
 /**
- * Public sitemap entries: the catalog plus one entry per for-sale lander,
- * each on its own domain. No admin pages, no API routes, no offer
- * endpoints, no hold/draft/sold pages.
+ * Host-aware sitemap entries: a sitemap may only list URLs on the host it
+ * is served from — Google rejects cross-domain URLs with "URL not allowed"
+ * (Search Console, Nov 2026; the previous version listed the catalog plus
+ * one lander URL per domain and was rejected).
+ *
+ * - Portfolio host: the catalog plus one portfolio-host page per hold
+ *   (/hold/<domain>) and per sold (/sold/<domain>) domain. For-sale domains
+ *   have no portfolio-host page — their page is the lander itself — so they
+ *   contribute nothing here.
+ * - A lander host in the catalog (for_sale or hold): its own root only.
+ * - Any other host: its own root only.
+ * No admin pages, no API routes, no offer endpoints.
  */
 export function sitemapEntries(
+  requestHost: string | null | undefined,
   portfolioUrl: string,
   domains: SitemapDomain[],
 ): { url: string }[] {
-  const base = portfolioUrl.replace(/\/+$/, "");
-  const entries = [{ url: `${base}/` }];
-  for (const d of domains) {
-    entries.push({ url: landerCanonical(d.domain) });
+  const host = normalizeHost(requestHost);
+  const portfolioHost = normalizeHost(
+    portfolioUrl.replace(/^[a-z]+:\/\//i, "").replace(/\/+$/, ""),
+  );
+  const effectiveHost = host || portfolioHost;
+  if (!effectiveHost) return [];
+  const base = `https://${effectiveHost}`;
+
+  if (effectiveHost === portfolioHost) {
+    const entries = [{ url: `${base}/` }];
+    for (const d of domains) {
+      const domain = d.domain.trim().toLowerCase();
+      if (!domain) continue;
+      if (d.status === "hold") {
+        entries.push({ url: `${base}/hold/${domain}/` });
+      } else if (d.status === "sold") {
+        entries.push({ url: `${base}/sold/${domain}/` });
+      }
+    }
+    return entries;
   }
-  return entries;
+
+  return [{ url: `${base}/` }];
 }
