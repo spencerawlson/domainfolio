@@ -7,7 +7,7 @@ already know a name; Afternic puts the names in front of people actually shoppin
 | File | What it is |
 |---|---|
 | [README.md](README.md) | This playbook (steps 1–6, step 2 transfer plan, sale flow) |
-| [listings.csv](listings.csv) | The three listings, ready to copy into Afternic |
+| [listings.csv](listings.csv) | The four listings, ready to copy into Afternic |
 | [PRICING.md](PRICING.md) | How list prices are calculated (net after commission) |
 
 > Rates, screens and partner lists change. Confirm commission and options in your Afternic
@@ -37,7 +37,7 @@ already know a name; Afternic puts the names in front of people actually shoppin
 
 ### 2. Add the domains
 - **Portfolio / My Domains → Add Domains**.
-- Paste: `axionory.com`, `trivantaq.com`, `opsnestly.com`.
+- Paste: `axionory.com`, `trivantaq.com`, `opsnestly.com`, `ventoryn.app`.
 
 ### 3. Set prices and details
 Use [listings.csv](listings.csv):
@@ -47,6 +47,7 @@ Use [listings.csv](listings.csv):
 | axionory.com | 3330 | *(empty)* | Technology / Brandable | A crisp, confident name for an AI, analytics, or deep-tech company. |
 | trivantaq.com | 2260 | *(empty)* | Finance / Fintech | A sharp name for a quant, trading, or financial-data platform. |
 | opsnestly.com | 1730 | *(empty)* | Technology / SaaS | A friendly home for a DevOps, IT-ops, or internal-tools product. |
+| ventoryn.app | 30000 | *(empty)* | Technology / SaaS | A bold name for a customer-acquisition and growth platform. |
 
 - **Floor price:** leave empty (we don't use minimum offers). If Afternic forces one, set it equal
   to the Buy Now price.
