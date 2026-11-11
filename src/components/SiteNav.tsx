@@ -1,4 +1,4 @@
-import { listForSale } from "@/lib/inventory";
+import { listCatalog, listForSale } from "@/lib/inventory";
 import { formatPrice } from "@/lib/pricing";
 import { LogoMark } from "./LogoMark";
 
@@ -34,6 +34,9 @@ export function Shell({
   children: React.ReactNode;
 }) {
   const domains = listForSale();
+  // "All domains" counts everything the catalog lists (for sale + reserved);
+  // the "For sale" nav below stays for-sale only.
+  const catalogCount = listCatalog().length;
   return (
     <div className="shell">
       <aside className="sidebar" aria-label="Portfolio">
@@ -54,7 +57,7 @@ export function Shell({
               <rect x="14" y="14" width="7" height="7" rx="1" />
             </svg>
             <span className="label">All domains</span>
-            <span className="meta">{domains.length}</span>
+            <span className="meta">{catalogCount}</span>
           </a>
           <div className="side-label">For sale</div>
           {domains.map((d) => (
