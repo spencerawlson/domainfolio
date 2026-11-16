@@ -63,7 +63,11 @@ export function sitemapEntries(
   const base = `https://${effectiveHost}`;
 
   if (effectiveHost === portfolioHost) {
-    const entries = [{ url: `${base}/` }];
+    const entries = [
+      { url: `${base}/` },
+      { url: `${base}/privacy` },
+      { url: `${base}/terms` },
+    ];
     for (const d of domains) {
       const domain = d.domain.trim().toLowerCase();
       if (!domain) continue;
