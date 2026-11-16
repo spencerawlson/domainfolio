@@ -38,11 +38,13 @@ describe("sitemapEntries", () => {
     { domain: "trivantaq.com", status: "for_sale" },
   ];
 
-  it("on the portfolio host lists only same-host URLs: catalog + hold pages", () => {
+  it("on the portfolio host lists only same-host URLs: catalog + legal pages + hold pages", () => {
     expect(
       sitemapEntries("domainfolio.site", "https://domainfolio.site", catalog),
     ).toEqual([
       { url: "https://domainfolio.site/" },
+      { url: "https://domainfolio.site/privacy" },
+      { url: "https://domainfolio.site/terms" },
       { url: "https://domainfolio.site/hold/axionory.com/" },
     ]);
   });
@@ -65,13 +67,17 @@ describe("sitemapEntries", () => {
       ]),
     ).toEqual([
       { url: "https://domainfolio.site/" },
+      { url: "https://domainfolio.site/privacy" },
+      { url: "https://domainfolio.site/terms" },
       { url: "https://domainfolio.site/sold/brightquill.io/" },
     ]);
   });
 
-  it("lists only the catalog on the portfolio host when nothing is listed", () => {
+  it("lists only the catalog and legal pages on the portfolio host when nothing is listed", () => {
     expect(sitemapEntries("domainfolio.site", "https://domainfolio.site", [])).toEqual([
       { url: "https://domainfolio.site/" },
+      { url: "https://domainfolio.site/privacy" },
+      { url: "https://domainfolio.site/terms" },
     ]);
   });
 

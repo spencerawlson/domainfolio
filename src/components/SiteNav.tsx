@@ -1,5 +1,6 @@
 import { listCatalog, listForSale } from "@/lib/inventory";
 import { formatPrice } from "@/lib/pricing";
+import { CookieSettingsButton } from "./CookieConsent";
 import { LogoMark } from "./LogoMark";
 
 const NAME = process.env.PORTFOLIO_NAME || "Domainfolio";
@@ -106,6 +107,11 @@ export function Shell({
             © {new Date().getFullYear()} {NAME}
           </span>
           <span>Every sale is completed through an independent escrow service.</span>
+          <nav className="footer-links" aria-label="Legal">
+            <a href="/privacy">Privacy</a>
+            <a href="/terms">Terms</a>
+            <CookieSettingsButton />
+          </nav>
         </footer>
       </div>
     </div>
