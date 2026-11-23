@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { validateOffer } from "../src/lib/validation";
+import { enforceMinimumOffer, validateOffer } from "../src/lib/validation";
 
 const base = {
   domain: "BlueMeadow.COM",
@@ -44,5 +44,26 @@ describe("validateOffer", () => {
   it("rounds amounts to cents", () => {
     const o = validateOffer({ ...base, amount: "2500.456" });
     expect(o.amount).toBe(2500.46);
+  });
+});
+
+describe("enforceMinimumOffer", () => {
+  it("accepts amounts at or above the minimum", () => {
+    expect(() => enforceMinimumOffer(1500, 1500, "example.com")).not.toThrow();
+    expect(() => enforceMinimumOffer(2500, 1500, "example.com")).not.toThrow();
+  });
+
+  it("accepts a missing amount and a missing minimum", () => {
+    // No stated price is an expression of interest, not a low offer.
+    expect(() => enforceMinimumOffer(null, 1500, "example.com")).not.toThrow();
+    expect(() => enforceMinimumOffer(1, null, "example.com")).not.toThrow();
+    expect(() => enforceMinimumOffer(null, null, "example.com")).not.toThrow();
+  });
+
+  it("rejects an amount below the minimum and names the floor", () => {
+    expect(() => enforceMinimumOffer(1, 1500, "example.com")).toThrow(
+      "The minimum offer for example.com is $1,500.",
+    );
+    expect(() => enforceMinimumOffer(1499.99, 1500, "example.com")).toThrow("$1,500");
   });
 });

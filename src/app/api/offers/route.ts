@@ -1,16 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createOffer, getDomain } from "@/lib/inventory";
+import { clientIpFromHeaders } from "@/lib/client-ip";
 import { notifyOffer } from "@/lib/mail";
 import { checkRateLimit } from "@/lib/ratelimit";
-import { validateOffer } from "@/lib/validation";
+import { enforceMinimumOffer, validateOffer } from "@/lib/validation";
 
 export const runtime = "nodejs";
-
-function clientIp(request: NextRequest): string {
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
-  return request.headers.get("x-real-ip") || "unknown";
-}
 
 /** Receive an offer on a listed domain. Honeypot bots get a fake success. */
 export async function POST(request: NextRequest) {
@@ -41,7 +36,20 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "That domain is not listed for sale." }, { status: 400 });
   }
 
-  const ip = clientIp(request);
+  // Minimum offer is enforced server-side (it used to be display-only).
+  // Checked before the rate limit so a rejected offer does not consume
+  // the buyer's 5/hour budget. The minimum is already shown on the
+  // lander page, so the error message leaks nothing new.
+  try {
+    enforceMinimumOffer(offer.amount, record.min_offer, record.domain);
+  } catch (err) {
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Offer is below the minimum." },
+      { status: 400 },
+    );
+  }
+
+  const ip = clientIpFromHeaders(request.headers);
   if (!checkRateLimit(`offer:${ip}`)) {
     return NextResponse.json(
       { error: "Too many offers from your connection. Please try again later." },

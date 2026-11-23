@@ -1,3 +1,5 @@
+import { formatPrice } from "./pricing";
+
 export interface OfferPayload {
   domain?: unknown;
   name?: unknown;
@@ -50,4 +52,21 @@ export function validateOffer(payload: OfferPayload): ValidatedOffer {
   }
 
   return { domain, name, email, amount, message, isBot: false };
+}
+
+/**
+ * Enforce a domain's minimum offer server-side. A null amount (buyer stated
+ * no price) is an expression of interest, not a below-minimum offer, so it
+ * is not rejected. A null minimum means no floor. Throws otherwise.
+ */
+export function enforceMinimumOffer(
+  amount: number | null,
+  minOffer: number | null,
+  domain: string,
+): void {
+  if (amount === null || minOffer === null) return;
+  if (amount < minOffer) {
+    const floor = formatPrice(minOffer) ?? `$${minOffer}`;
+    throw new Error(`The minimum offer for ${domain} is ${floor}.`);
+  }
 }
